@@ -11,7 +11,12 @@ data class Err<out E>(val reason: E) : Result<Nothing, E>()
  * Call a function and wrap the result in a Result, catching any Exception and returning it as Err value.
  */
 inline fun <T> resultFrom(block: () -> T): Result<T, Exception> =
-    try { Ok(block()) } catch (x: Exception) { Err(x) }
+    try {
+        Ok(block())
+    }
+    catch (x: Exception) {
+        Err(x)
+    }
 
 /**
  * Map a function over the _value_ of a successful Result.
