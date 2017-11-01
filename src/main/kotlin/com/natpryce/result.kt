@@ -35,19 +35,19 @@ inline fun <T, U, E> Result<T, E>.flatMap(f: (T) -> Result<U, E>): Result<U, E> 
 }
 
 /**
- * Flat-map a function over the _reason_ of a unsuccessful Result.
- */
-inline fun <T, E, F> Result<T, E>.flatMapError(f: (E) -> Result<T, F>): Result<T, F> = when (this) {
-    is Ok<T> -> this
-    is Err<E> -> f(reason)
-}
-
-/**
  * Map a function over the _reason_ of an unsuccessful Result.
  */
 inline fun <T, E, F> Result<T, E>.mapError(f: (E) -> F): Result<T, F> = when (this) {
     is Ok<T> -> this
     is Err<E> -> Err(f(reason))
+}
+
+/**
+ * Flat-map a function over the _reason_ of a unsuccessful Result.
+ */
+inline fun <T, E, F> Result<T, E>.flatMapError(f: (E) -> Result<T, F>): Result<T, F> = when (this) {
+    is Ok<T> -> this
+    is Err<E> -> f(reason)
 }
 
 /**
