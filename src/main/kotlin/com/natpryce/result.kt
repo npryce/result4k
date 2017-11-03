@@ -69,7 +69,7 @@ inline fun <T, E> Result<T, E>.onError(block: (Err<E>) -> Nothing): T = when (th
 /**
  * Unwrap a Result by returning the success value or calling _errorToValue_ to mapping the error reason to a plain value.
  */
-inline fun <T,E> Result<T,E>.recover(errorToValue: (E)->T) = when (this) {
+inline fun <S, T : S, U : S, E> Result<T, E>.recover(errorToValue: (E) -> U): S = when (this) {
     is Ok<T> -> value
     is Err<E> -> errorToValue(reason)
 }
