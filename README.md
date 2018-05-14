@@ -5,11 +5,11 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.natpryce/result4k.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.natpryce%22%20AND%20a%3A%22result4k%22)
 
 
-A Result monad for Kotlin
+Type safe error handling in Kotlin.
 
 ## Quick start
 
-Kotlin does not type-check exceptions.  Result4k lets you type-check error handling.  
+Kotlin does not type-check exceptions.  Result4k lets you type-check code that reports and recovers from errors.
 
 A `Result<T,E>` represents the result of a calculation of a _T_ value that might fail with an error of type _E_.
 
