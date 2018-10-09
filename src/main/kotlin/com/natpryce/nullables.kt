@@ -5,23 +5,23 @@ package com.natpryce
  */
 
 /**
- * Convert a nullable value to a Result, using the result of the errorSupplier as the error reason if the value is null.
+ * Convert a nullable value to a Result, using the result of the _failureSupplier_ as the failure reason if the value is null.
  */
-inline fun <T, E> T?.asResultOr(errorSupplier: () -> E) =
-    if (this != null) Ok(this) else Err(errorSupplier())
+inline fun <T, E> T?.asResultOr(failureSupplier: () -> E) =
+    if (this != null) Success(this) else Failure(failureSupplier())
 
 /**
- * Returns the success value, or null if the Result is an error.
+ * Returns the success value, or null if the Result is a failure.
  */
 fun <T, E> Result<T, E>.valueOrNull() = when (this) {
-    is Ok<T> -> value
-    is Err<E> -> null
+    is Success<T> -> value
+    is Failure<E> -> null
 }
 
 /**
- * Returns the error reason, or null if the Result is a success.
+ * Returns the failure reason, or null if the Result is a success.
  */
-fun <T, E> Result<T, E>.errorOrNull() = when (this) {
-    is Ok<T> -> null
-    is Err<E> -> reason
+fun <T, E> Result<T, E>.failureOrNull() = when (this) {
+    is Success<T> -> null
+    is Failure<E> -> reason
 }
