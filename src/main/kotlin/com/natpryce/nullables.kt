@@ -5,10 +5,18 @@ package com.natpryce
  */
 
 /**
- * Convert a nullable value to a Result, using the result of the _failureSupplier_ as the failure reason if the value is null.
+ * Convert a nullable value to a Result, using the result of [failureDescription] as the failure reason
+ * if the value is null.
  */
-inline fun <T, E> T?.asResultOr(failureSupplier: () -> E) =
-    if (this != null) Success(this) else Failure(failureSupplier())
+inline fun <T, E> T?.asResultOr(failureDescription: () -> E) =
+    if (this != null) Success(this) else Failure(failureDescription())
+
+/**
+ * Convert a Success of a nullable value to a Success of a non-null value or a Failure,
+ * using the result of [failureDescription] as the failure reason, if the value is null.
+ */
+inline fun <T: Any, E> Result<T?,E>.filterNotNull(failureDescription: () -> E) =
+    flatMap { it.asResultOr(failureDescription) }
 
 /**
  * Returns the success value, or null if the Result is a failure.
