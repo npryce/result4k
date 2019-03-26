@@ -35,18 +35,18 @@ inline fun <T, Tʹ, E> Result<T, E>.flatMap(f: (T) -> Result<Tʹ, E>): Result<T�
     }
 
 /**
- * Map a function over the _reason_ of an unsuccessful Result.
- */
-inline fun <T, E, Eʹ> Result<T, E>.mapFailure(f: (E) -> Eʹ): Result<T, Eʹ> =
-    flatMapFailure { reason -> Failure(f(reason)) }
-
-/**
  * Flat-map a function over the _reason_ of a unsuccessful Result.
  */
 inline fun <T, E, Eʹ> Result<T, E>.flatMapFailure(f: (E) -> Result<T, Eʹ>): Result<T, Eʹ> = when (this) {
     is Success<T> -> this
     is Failure<E> -> f(reason)
 }
+
+/**
+ * Map a function over the _reason_ of an unsuccessful Result.
+ */
+inline fun <T, E, Eʹ> Result<T, E>.mapFailure(f: (E) -> Eʹ): Result<T, Eʹ> =
+    flatMapFailure { reason -> Failure(f(reason)) }
 
 /**
  * Unwrap a Result in which both the success and failure values have the same type, returning a plain value.
@@ -67,10 +67,8 @@ inline fun <T, E> Result<T, E>.onFailure(block: (Failure<E>) -> Nothing): T = wh
 /**
  * Unwrap a Result by returning the success value or calling _failureToValue_ to mapping the failure reason to a plain value.
  */
-inline fun <S, T : S, U : S, E> Result<T, E>.recover(failureToValue: (E) -> U): S = when (this) {
-    is Success<T> -> value
-    is Failure<E> -> failureToValue(reason)
-}
+inline fun <S, T : S, U : S, E> Result<T, E>.recover(errorToValue: (E) -> U): S =
+    mapFailure(errorToValue).get()
 
 /**
  * Perform a side effect with the success value.
