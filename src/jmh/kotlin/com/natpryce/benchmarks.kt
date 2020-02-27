@@ -20,7 +20,7 @@ open class ExceptionsBenchmark {
             blackhole.consume(action())
         }
         catch (e: Exception) {
-            blackhole.consume(e)
+            blackhole.consume(e.message)
         }
     }
     
@@ -42,13 +42,7 @@ open class NullableBenchmark {
     }
     
     private inline fun measure(blackhole: Blackhole, action: () -> String?) {
-        val result = action()
-        if (result != null) {
-            blackhole.consume(result)
-        }
-        else {
-            blackhole.consume("failure")
-        }
+        blackhole.consume(action() ?: "failure")
     }
     
     companion object {
@@ -71,9 +65,7 @@ open class Result4kBenchmark {
     }
     
     private inline fun measure(blackhole: Blackhole, action: () -> Result<String,Error>) {
-        action()
-            .peek { blackhole.consume(it) }
-            .peekFailure { blackhole.consume("failure") }
+        blackhole.consume(action().recover { it.name })
     }
     
     companion object {
